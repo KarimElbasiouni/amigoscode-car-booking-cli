@@ -35,8 +35,7 @@ public class Main {
 
             int choice;
             try {
-                choice = scanner.nextInt();
-                scanner.nextLine();
+                choice = Integer.parseInt(scanner.nextLine());
                 switch(choice){
                     case 1 -> handleBookACarPrompt();
                     case 2 -> handleDeleteBookingPrompt();
@@ -124,10 +123,10 @@ public class Main {
         );
     }
     private static void handleViewElectricCarsPrompt(){
-        System.out.println("Retrieving electric cars...");
+        System.out.println("Retrieving available electric cars...");
 
         System.out.println(Arrays.toString(
-                carService.getElectricCars())
+                bookingService.getAvailableElectricCars())
         );
     }
     private static void handleViewAllUsersPrompt(){

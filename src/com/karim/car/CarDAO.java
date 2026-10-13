@@ -38,8 +38,7 @@ public class CarDAO {
         for (Car car : cars) {
 
             if(car.isElectric()) {
-                idx++;
-                electricCars[idx] = car;
+                electricCars[idx++] = car;
             }
 
         }

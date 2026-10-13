@@ -15,7 +15,7 @@ public class CarService {
     }
 
     public Car[] getElectricCars() throws RuntimeException{
-        Car[] electricCars = carDao.selectElectricCars();
+        Car[] electricCars = trimCarArray(carDao.selectElectricCars());
         if (electricCars.length > 0){
             return electricCars;
         }

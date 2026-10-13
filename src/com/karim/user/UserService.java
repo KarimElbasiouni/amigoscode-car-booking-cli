@@ -1,5 +1,7 @@
 package com.karim.user;
 
+import com.karim.car.Car;
+
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -7,7 +9,12 @@ public class UserService {
     private UserDAO userDao = new UserDAO();
 
     public User getUserById(UUID id) {
-         return userDao.selectUserById(id);
+        User user = userDao.selectUserById(id);
+        if(user == null){
+            throw new RuntimeException("User does not exist");
+
+        }
+         return user;
 
     }
 

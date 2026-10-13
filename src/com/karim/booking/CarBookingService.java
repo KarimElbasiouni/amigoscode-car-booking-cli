@@ -95,16 +95,41 @@ public class CarBookingService {
         outerLoop:
         for (Car car : allCars) {
             for (CarBooking carBooking : carBookings) {
-                if(carBooking == null){
-                    continue;
-                }
-                if(car.equals(carBooking.getCar())) {
+//                if(carBooking == null){
+//                    continue;
+//                }
+                if(car.equals(carBooking.getCar())
+                        && carBooking.getStatus().equals(BookingStatus.ACTIVE)) {
                     continue outerLoop;
                 }
             }
             availableCars[idx++] = car;
         }
         return trimCarsArray(availableCars);
+    }
+
+    public Car[] getAvailableElectricCars(){
+        Car[] allElectricCars = carService.getElectricCars();
+        CarBooking[] carBookings = carBookingDao.selectAllCarBookings();
+
+        Car[] availableElectricCars = new Car[allElectricCars.length];
+        int idx = 0;
+        outerLoop:
+        for (Car car : allElectricCars) {
+            for (CarBooking carBooking : carBookings) {
+//                if(carBooking == null){
+//                    continue;
+//                }
+                if(car.equals(carBooking.getCar())
+                        && carBooking.getStatus().equals(BookingStatus.ACTIVE)) {
+                    continue outerLoop;
+                }
+            }
+            availableElectricCars[idx++] = car;
+        }
+        return trimCarsArray(availableElectricCars);
+
+
     }
 
     private void validateDates(LocalDate startDate, LocalDate endDate) throws IllegalArgumentException{

@@ -20,7 +20,11 @@ public class CarBookingDAO {
     }
 
     public CarBooking[] selectAllCarBookings(){
-        return carBookings;
+        CarBooking[] allCarBookings = new CarBooking[nextAvailableSlot];
+        for (int idx = 0; idx < nextAvailableSlot; idx++) {
+            allCarBookings[idx] = carBookings[idx];
+        }
+        return allCarBookings;
     }
 
     public CarBooking[] selectCarBookingsByUserId(UUID userId){
@@ -38,11 +42,12 @@ public class CarBookingDAO {
     }
 
     public CarBooking selectCarBookingById(UUID carBookingId){
-        for (CarBooking carBooking : carBookings) {
-            if(carBookingId.equals(carBooking.getId())){
-                return carBooking;
-            }
+        for (int idx = 0; idx < nextAvailableSlot ; idx++) {
+            if(carBookingId.equals(carBookings[idx].getId())){
+                return carBookings[idx];
+            };
         }
+
         return null;
     }
 
