@@ -1,8 +1,5 @@
 package com.karim.car;
 
-import com.karim.booking.BookingStatus;
-import com.karim.booking.CarBooking;
-import com.karim.booking.CarBookingDAO;
 import java.math.BigDecimal;
 import java.util.UUID;
 

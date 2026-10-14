@@ -1,7 +1,6 @@
 package com.karim;
 
 import com.karim.booking.CarBookingService;
-import com.karim.car.CarService;
 import com.karim.user.UserService;
 
 import java.time.LocalDate;
@@ -12,7 +11,6 @@ import java.util.UUID;
 
 public class Main {
     private final static CarBookingService bookingService = new CarBookingService();
-    private final static CarService carService = new CarService();
     private final static UserService userService = new UserService();
     private final static Scanner scanner = new Scanner(System.in);
 

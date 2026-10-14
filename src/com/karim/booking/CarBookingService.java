@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
 import java.util.UUID;
 
 public class CarBookingService {
@@ -95,9 +94,6 @@ public class CarBookingService {
         outerLoop:
         for (Car car : allCars) {
             for (CarBooking carBooking : carBookings) {
-//                if(carBooking == null){
-//                    continue;
-//                }
                 if(car.equals(carBooking.getCar())
                         && carBooking.getStatus().equals(BookingStatus.ACTIVE)) {
                     continue outerLoop;
@@ -117,9 +113,6 @@ public class CarBookingService {
         outerLoop:
         for (Car car : allElectricCars) {
             for (CarBooking carBooking : carBookings) {
-//                if(carBooking == null){
-//                    continue;
-//                }
                 if(car.equals(carBooking.getCar())
                         && carBooking.getStatus().equals(BookingStatus.ACTIVE)) {
                     continue outerLoop;
