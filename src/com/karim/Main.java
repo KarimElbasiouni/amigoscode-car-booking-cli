@@ -1,6 +1,14 @@
 package com.karim;
 
+import com.karim.booking.CarBookingArrayDataAccessService;
+import com.karim.booking.CarBookingDAO;
+import com.karim.booking.CarBookingFileDataAccessService;
 import com.karim.booking.CarBookingService;
+import com.karim.car.CarArrayDataAccessService;
+import com.karim.car.CarDAO;
+import com.karim.car.CarService;
+import com.karim.user.UserArrayDataAccessService;
+import com.karim.user.UserDAO;
 import com.karim.user.UserService;
 
 import java.time.LocalDate;
@@ -10,13 +18,23 @@ import java.util.Scanner;
 import java.util.UUID;
 
 public class Main {
-    private final static CarBookingService bookingService = new CarBookingService();
-    private final static UserService userService = new UserService();
+
+
+    private final static UserDAO userDao = new UserArrayDataAccessService();
+    private final static CarDAO carDao = new CarArrayDataAccessService();
+
+    //private final static CarBookingDAO carBookingDao = new CarBookingArrayDataAccessService();
+    private final static CarBookingFileDataAccessService carBookingDao = new CarBookingFileDataAccessService();
+
+
+    private final static UserService userService = new UserService(userDao);
+    private final static CarService carService = new CarService(carDao);
+    private final static CarBookingService bookingService = new CarBookingService(userService, carService, carBookingDao);
+
     private final static Scanner scanner = new Scanner(System.in);
 
 
     static void main(String[] args) throws RuntimeException{
-
 
         while(true) {
             System.out.println("Welcome to the Car Booking System! Select a menu item from the main menu by typing its corresponding number");

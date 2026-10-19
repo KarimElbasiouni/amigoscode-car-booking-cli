@@ -13,9 +13,15 @@ import java.util.UUID;
 
 public class CarBookingService {
 
-    private final UserService userService = new UserService();
-    private final CarService carService = new CarService();
-    private final CarBookingDAO carBookingDao = new CarBookingDAO();
+    private final UserService userService;
+    private final CarService carService;
+    private final CarBookingDAO carBookingDao;
+
+    public CarBookingService(UserService userService, CarService carService, CarBookingDAO carBookingDao){
+        this.userService = userService;
+        this.carService = carService;
+        this.carBookingDao = carBookingDao;
+    }
 
     public CarBooking bookCar(UUID userId, UUID carId, LocalDate startDate, LocalDate endDate) throws RuntimeException{
         // validation checks

@@ -3,7 +3,11 @@ package com.karim.user;
 import java.util.UUID;
 
 public class UserService {
-    private UserDAO userDao = new UserDAO();
+    private final UserDAO userDao;
+
+    public UserService(UserDAO userDao) {
+        this.userDao = userDao;
+    }
 
     public User getUserById(UUID id) {
         User user = userDao.selectUserById(id);
