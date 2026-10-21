@@ -3,7 +3,11 @@ package com.karim.car;
 import java.util.UUID;
 
 public class CarService {
-    private CarDAO carDao = new CarDAO();
+    private final CarDAO carDao;
+
+    public CarService(CarDAO carDao) {
+        this.carDao = carDao;
+    }
 
     public Car getCarById(UUID id) throws RuntimeException{
         Car car = carDao.selectCarById(id);
