@@ -12,11 +12,7 @@ public class CarBookingFileDataAccessService implements CarBookingDAO {
     private final File numOfBookingsFile;
     private final File bookingsFile;
     private final File tempWritingFile;
-    /*
-    * NOTE TO SELF:
-    * Make sure that we increment nextAvailableSlot/numOfBookings. Previously we had it so that it increments on save, decrements on delete.
-    * Likely should be increments on save ONLY
-    * */
+
     {
         bookingsFile = new File("bookings.dat");
         numOfBookingsFile = new File("numOfBookings.dat");
@@ -25,7 +21,7 @@ public class CarBookingFileDataAccessService implements CarBookingDAO {
             if(!bookingsFile.exists()){
                 bookingsFile.createNewFile();
             }
-            if(!numOfBookingsFile.exists()){
+            if(!numOfBookingsFile.exists() || numOfBookingsFile.length() == 0){
                 numOfBookingsFile.createNewFile();
             }else {
                 ObjectInputStream loadCount = new ObjectInputStream(

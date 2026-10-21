@@ -22,10 +22,7 @@ public class Main {
 
     private final static UserDAO userDao = new UserArrayDataAccessService();
     private final static CarDAO carDao = new CarArrayDataAccessService();
-
-    //private final static CarBookingDAO carBookingDao = new CarBookingArrayDataAccessService();
-    private final static CarBookingFileDataAccessService carBookingDao = new CarBookingFileDataAccessService();
-
+    private final static CarBookingDAO carBookingDao = new CarBookingFileDataAccessService();
 
     private final static UserService userService = new UserService(userDao);
     private final static CarService carService = new CarService(carDao);
