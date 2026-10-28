@@ -13,7 +13,6 @@ import com.karim.user.UserService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -22,7 +21,7 @@ public class Main {
 
     private final static UserDAO userDao = new UserArrayDataAccessService();
     private final static CarDAO carDao = new CarArrayDataAccessService();
-    private final static CarBookingDAO carBookingDao = new CarBookingFileDataAccessService();
+    private final static CarBookingDAO carBookingDao = new CarBookingArrayDataAccessService();
 
     private final static UserService userService = new UserService(userDao);
     private final static CarService carService = new CarService(carDao);
@@ -116,37 +115,32 @@ public class Main {
         System.out.println("Please enter the ID for the desired user:");
         UUID userId = UUID.fromString(scanner.nextLine());
         System.out.println("User Bookings for User: " +
-                Arrays.toString(
-                        bookingService.getUserBookings(userId))
+                        bookingService.getUserBookings(userId)
         );
     }
     private static void handleViewAllBookingsPrompt(){
         System.out.println("Retrieving all bookings...");
-
-        System.out.println(Arrays.toString(
-                bookingService.getAllBookings())
+        System.out.println(
+                bookingService.getAllBookings()
         );
     }
 
     private static void handleViewAvailableCarsPrompt(){
         System.out.println("Retrieving available cars...");
-
-        System.out.println(Arrays.toString(
-                bookingService.getAvailableCars())
+        System.out.println(
+                bookingService.getAvailableCars()
         );
     }
     private static void handleViewElectricCarsPrompt(){
         System.out.println("Retrieving available electric cars...");
-
-        System.out.println(Arrays.toString(
-                bookingService.getAvailableElectricCars())
+        System.out.println(
+                bookingService.getAvailableElectricCars()
         );
     }
     private static void handleViewAllUsersPrompt(){
         System.out.println("Retrieving users...");
-
-        System.out.println(Arrays.toString(
-                userService.getAllUsers())
+        System.out.println(
+                userService.getAllUsers()
         );
     }
 }

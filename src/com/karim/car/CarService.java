@@ -1,5 +1,6 @@
 package com.karim.car;
 
+import java.util.List;
 import java.util.UUID;
 
 public class CarService {
@@ -18,35 +19,17 @@ public class CarService {
         return car;
     }
 
-    public Car[] getElectricCars() throws RuntimeException{
-        Car[] electricCars = trimCarArray(carDao.selectElectricCars());
-        if (electricCars.length > 0){
+    public List<Car> getElectricCars() throws RuntimeException{
+        List<Car> electricCars = carDao.selectElectricCars();
+        if (!electricCars.isEmpty()){
             return electricCars;
         }
         throw new RuntimeException("No electric cars in database");
     }
 
-    public Car[] getAllCars(){
+    public List<Car> getAllCars(){
         // no checks since there is No CRUD functionality for Cars
         return carDao.selectAllCars();
     }
 
-
-    private Car[] trimCarArray(Car[] cars){
-        int numOfNonNull = 0;
-        for (Car car : cars) {
-            if(car!=null){
-                numOfNonNull++;
-            }
-        }
-
-        Car[] trimmed =  new Car[numOfNonNull];
-        int trimmedIdx = 0;
-        for (Car car : cars) {
-            if(car!=null){
-                trimmed[trimmedIdx++] = car;
-            }
-        }
-        return trimmed;
-    }
 }

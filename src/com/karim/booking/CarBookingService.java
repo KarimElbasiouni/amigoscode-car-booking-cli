@@ -9,6 +9,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class CarBookingService {
@@ -29,7 +31,7 @@ public class CarBookingService {
         Car car = carService.getCarById(carId);
         validateDates(startDate,endDate);
 
-        CarBooking[] allBookings = carBookingDao.selectAllCarBookings();
+        List<CarBooking> allBookings = carBookingDao.selectAllCarBookings();
         checkCarAvailability(allBookings, carId);
 
         //checks passed; book car
@@ -65,38 +67,34 @@ public class CarBookingService {
         carBookingDao.deleteCarBooking(carBooking);
     }
 
-    public CarBooking[] getUserBookings(UUID userId) throws RuntimeException{
+    public List<CarBooking> getUserBookings(UUID userId) throws RuntimeException{
         User user = userService.getUserById(userId);
         if(user==null) {
             throw new RuntimeException("User does not exist");
         }
-        CarBooking[] trimmedCarBookings = trimCarBookingsArray(
-                carBookingDao.selectCarBookingsByUserId(userId)
-        );
+        List<CarBooking> userCarBookings = carBookingDao.selectCarBookingsByUserId(userId);
 
-        if(trimmedCarBookings.length > 0){
-            return trimmedCarBookings;
+        if(!userCarBookings.isEmpty()){
+            return carBookingDao.selectCarBookingsByUserId(userId);
         }
         throw new RuntimeException("No Bookings have been made by " + user.toString());
     }
 
-    public CarBooking[] getAllBookings() throws RuntimeException {
-        CarBooking[] trimmedCarBookings = trimCarBookingsArray(
-                carBookingDao.selectAllCarBookings()
-        );
+    public List<CarBooking> getAllBookings() throws RuntimeException {
+        List<CarBooking> carBookings = carBookingDao.selectAllCarBookings();
 
-        if(trimmedCarBookings.length > 0){
-            return trimmedCarBookings;
+        if(!carBookings.isEmpty()){
+            return carBookingDao.selectAllCarBookings();
         }
         throw new RuntimeException("No Bookings have been made.");
     }
 
-    public Car[] getAvailableCars(){
-        Car[] allCars = carService.getAllCars();
-        CarBooking[] carBookings = carBookingDao.selectAllCarBookings();
+    public List<Car>getAvailableCars(){
+        List<Car> allCars = carService.getAllCars();
+        List<CarBooking> carBookings = carBookingDao.selectAllCarBookings();
 
-        Car[] availableCars = new Car[allCars.length];
-        int idx = 0;
+        List<Car> availableCars = new ArrayList<>();
+
         outerLoop:
         for (Car car : allCars) {
             for (CarBooking carBooking : carBookings) {
@@ -105,17 +103,17 @@ public class CarBookingService {
                     continue outerLoop;
                 }
             }
-            availableCars[idx++] = car;
+            availableCars.add(car);
         }
-        return trimCarsArray(availableCars);
+        return availableCars;
     }
 
-    public Car[] getAvailableElectricCars(){
-        Car[] allElectricCars = carService.getElectricCars();
-        CarBooking[] carBookings = carBookingDao.selectAllCarBookings();
+    public List<Car> getAvailableElectricCars(){
+        List<Car> allElectricCars = carService.getElectricCars();
+        List<CarBooking> carBookings = carBookingDao.selectAllCarBookings();
 
-        Car[] availableElectricCars = new Car[allElectricCars.length];
-        int idx = 0;
+        List<Car> availableElectricCars = new ArrayList<>();
+
         outerLoop:
         for (Car car : allElectricCars) {
             for (CarBooking carBooking : carBookings) {
@@ -124,11 +122,9 @@ public class CarBookingService {
                     continue outerLoop;
                 }
             }
-            availableElectricCars[idx++] = car;
+            availableElectricCars.add(car);
         }
-        return trimCarsArray(availableElectricCars);
-
-
+        return availableElectricCars;
     }
 
     private void validateDates(LocalDate startDate, LocalDate endDate) throws IllegalArgumentException{
@@ -142,7 +138,7 @@ public class CarBookingService {
         }
     }
 
-    private void checkCarAvailability(CarBooking[] carBookings, UUID carId) throws RuntimeException {
+    private void checkCarAvailability(List<CarBooking> carBookings, UUID carId) throws RuntimeException {
 
         for (CarBooking booking : carBookings) {
             if(booking == null){
@@ -156,40 +152,4 @@ public class CarBookingService {
 
     }
 
-    //Note: Could potentially use utils folder to make a trimArray(Object obj) util function to trim all arrays (User, Car, CarBooking)
-    private CarBooking[] trimCarBookingsArray(CarBooking[] carBookings){
-        int numOfNonNull = 0;
-        for (CarBooking carBooking : carBookings) {
-            if(carBooking != null){
-                numOfNonNull++;
-            }
-        }
-
-        CarBooking[] trimmed =  new CarBooking[numOfNonNull];
-        int trimmedIdx = 0;
-        for (CarBooking carBooking : carBookings) {
-            if(carBooking != null){
-                trimmed[trimmedIdx++] = carBooking;
-            }
-        }
-        return trimmed;
-    }
-
-    private Car[] trimCarsArray(Car[] cars){
-        int numOfNonNull = 0;
-        for (Car car : cars) {
-            if(car != null){
-                numOfNonNull++;
-            }
-        }
-
-        Car[] trimmed =  new Car[numOfNonNull];
-        int trimmedIdx = 0;
-        for (Car car : cars) {
-            if(car != null){
-                trimmed[trimmedIdx++] = car;
-            }
-        }
-        return trimmed;
-    }
 }

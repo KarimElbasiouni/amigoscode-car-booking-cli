@@ -1,5 +1,6 @@
 package com.karim.user;
 
+import java.util.List;
 import java.util.UUID;
 
 public class UserService {
@@ -19,7 +20,7 @@ public class UserService {
 
     }
 
-    public User[] getAllUsers(){
+    public List<User> getAllUsers(){
         // no checks since there is No CRUD functionality for Users
         return userDao.selectAllUsers();
     }

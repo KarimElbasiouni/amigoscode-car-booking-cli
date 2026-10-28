@@ -1,19 +1,19 @@
 package com.karim.booking;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class CarBookingArrayDataAccessService implements CarBookingDAO {
-    private static final CarBooking[] carBookings;
-    private final static int CAPACITY = 50;
-    private int nextAvailableSlot;
+    private static final List<CarBooking> carBookings;
 
     static{
-        carBookings = new CarBooking[CAPACITY];
+        carBookings = new ArrayList<>();
     }
 
     @Override
     public void saveCarBooking(CarBooking carBooking){
-        carBookings[nextAvailableSlot++] = carBooking;
+        carBookings.add(carBooking);
     }
 
     @Override
@@ -22,36 +22,33 @@ public class CarBookingArrayDataAccessService implements CarBookingDAO {
     }
 
     @Override
-    public CarBooking[] selectAllCarBookings(){
-        CarBooking[] allCarBookings = new CarBooking[nextAvailableSlot];
-        for (int idx = 0; idx < nextAvailableSlot; idx++) {
-            allCarBookings[idx] = carBookings[idx];
-        }
-        return allCarBookings;
+    public List<CarBooking>  selectAllCarBookings(){
+        return carBookings;
     }
 
     @Override
-    public CarBooking[] selectCarBookingsByUserId(UUID userId){
+    public List<CarBooking>  selectCarBookingsByUserId(UUID userId){
 
-        CarBooking[] userCarBooking = new CarBooking[CAPACITY];
-        int idx = 0;
-        for (CarBooking carBooking : carBookings) {
-            if(carBooking != null) {
-                if(userId.equals(carBooking.getUser().getId())){
-                    userCarBooking[idx++] = carBooking;
-                }
+        List<CarBooking> userCarBookings = new ArrayList<>();
+
+        carBookings.forEach(carBooking -> {
+            if (userId.equals(carBooking.getUser().getId())){
+                userCarBookings.add(carBooking);
             }
-        }
-        return userCarBooking;
+        });
+        return userCarBookings;
     }
 
     @Override
     public CarBooking selectCarBookingById(UUID carBookingId){
-        for (int idx = 0; idx < nextAvailableSlot ; idx++) {
-            if(carBookingId.equals(carBookings[idx].getId())){
-                return carBookings[idx];
+
+        for(CarBooking carBooking: carBookings){
+            if (carBookingId.equals(carBooking.getId())){
+                return carBooking;
             }
         }
+
         return null;
     }
 }
+
