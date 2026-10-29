@@ -1,5 +1,6 @@
 package com.karim.booking;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface CarBookingDAO {
@@ -9,9 +10,9 @@ public interface CarBookingDAO {
 
     void deleteCarBooking(CarBooking carBooking);
 
-    CarBooking[] selectAllCarBookings();
+    List<CarBooking> selectAllCarBookings();
 
-    CarBooking[] selectCarBookingsByUserId(UUID userId);
+    List<CarBooking>  selectCarBookingsByUserId(UUID userId);
 
     CarBooking selectCarBookingById(UUID carBookingId);
 

@@ -4,10 +4,11 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class CarBookingFileDataAccessService implements CarBookingDAO {
-    private final int CAPACITY = 50;
     private int numOfBookings;
     private final File numOfBookingsFile;
     private final File bookingsFile;
@@ -94,7 +95,6 @@ public class CarBookingFileDataAccessService implements CarBookingDAO {
             }catch(EOFException _){
 
             }
-
         }  catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -109,8 +109,8 @@ public class CarBookingFileDataAccessService implements CarBookingDAO {
 
 
     @Override
-    public CarBooking[] selectAllCarBookings() {
-        CarBooking[] allCarBookings = new CarBooking[numOfBookings];
+    public List<CarBooking> selectAllCarBookings() {
+        List<CarBooking> allCarBookings = new ArrayList<>();
         try(
                 ObjectInputStream input = new ObjectInputStream(
                         new FileInputStream(bookingsFile))
@@ -118,7 +118,7 @@ public class CarBookingFileDataAccessService implements CarBookingDAO {
 
             for (int i = 0; i < numOfBookings; i++) {
                 CarBooking currentBooking = (CarBooking) input.readObject();
-                allCarBookings[i] = currentBooking;
+                allCarBookings.add(currentBooking);
             }
             return allCarBookings;
 
@@ -132,18 +132,17 @@ public class CarBookingFileDataAccessService implements CarBookingDAO {
 
 
     @Override
-    public CarBooking[] selectCarBookingsByUserId(UUID userId) {
-        CarBooking[] userBookings = new CarBooking[numOfBookings];
+    public List<CarBooking> selectCarBookingsByUserId(UUID userId) {
+        List<CarBooking> userBookings =  new ArrayList<>();
         try (
                 ObjectInputStream input = new ObjectInputStream(
                         new FileInputStream(bookingsFile))
         ){
 
-            int idx = 0;
             while(true) {
                 CarBooking currentBooking = (CarBooking) input.readObject();
                 if(userId.equals(currentBooking.getUser().getId())){
-                    userBookings[idx++] = currentBooking;
+                    userBookings.add(currentBooking);
                 }
             }
 
