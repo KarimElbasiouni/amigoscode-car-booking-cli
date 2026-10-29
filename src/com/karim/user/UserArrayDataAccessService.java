@@ -18,7 +18,7 @@ public class UserArrayDataAccessService implements UserDAO{
     };
 
     public List<User> selectAllUsers(){
-        return users;
+        return new ArrayList<>(users);
     }
 
     public User selectUserById(UUID userId){

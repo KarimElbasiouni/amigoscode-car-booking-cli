@@ -23,7 +23,7 @@ public class CarBookingArrayDataAccessService implements CarBookingDAO {
 
     @Override
     public List<CarBooking>  selectAllCarBookings(){
-        return carBookings;
+        return new ArrayList<>(carBookings);
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.karim.car;
 
-import com.karim.booking.CarBooking;
-
 import java.util.List;
 import java.util.UUID;
 

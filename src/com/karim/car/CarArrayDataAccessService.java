@@ -49,7 +49,7 @@ public class CarArrayDataAccessService implements CarDAO {
     }
 
     public List<Car> selectAllCars(){
-        return cars;
+        return new ArrayList<>(cars);
     }
 }
 

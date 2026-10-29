@@ -75,7 +75,7 @@ public class CarBookingService {
         List<CarBooking> userCarBookings = carBookingDao.selectCarBookingsByUserId(userId);
 
         if(!userCarBookings.isEmpty()){
-            return carBookingDao.selectCarBookingsByUserId(userId);
+            return userCarBookings;
         }
         throw new RuntimeException("No Bookings have been made by " + user.toString());
     }
@@ -84,7 +84,7 @@ public class CarBookingService {
         List<CarBooking> carBookings = carBookingDao.selectAllCarBookings();
 
         if(!carBookings.isEmpty()){
-            return carBookingDao.selectAllCarBookings();
+            return carBookings;
         }
         throw new RuntimeException("No Bookings have been made.");
     }
