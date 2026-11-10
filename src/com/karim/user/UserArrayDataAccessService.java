@@ -22,11 +22,9 @@ public class UserArrayDataAccessService implements UserDAO{
     }
 
     public User selectUserById(UUID userId){
-        for (User user : users) {
-            if(user.getId().equals(userId)){
-                return user;
-            }
-        }
-        return null;
+        return users.stream()
+                .filter(car -> car.getId().equals(userId))
+                .findFirst()
+                .orElse(null);
     }
 }

@@ -28,27 +28,19 @@ public class CarBookingArrayDataAccessService implements CarBookingDAO {
 
     @Override
     public List<CarBooking>  selectCarBookingsByUserId(UUID userId){
-
-        List<CarBooking> userCarBookings = new ArrayList<>();
-
-        carBookings.forEach(carBooking -> {
-            if (userId.equals(carBooking.getUser().getId())){
-                userCarBookings.add(carBooking);
-            }
-        });
-        return userCarBookings;
+        return carBookings
+                .stream()
+                .filter(carBooking -> userId.equals(carBooking.getUser().getId()))
+                .toList();
     }
 
     @Override
     public CarBooking selectCarBookingById(UUID carBookingId){
-
-        for(CarBooking carBooking: carBookings){
-            if (carBookingId.equals(carBooking.getId())){
-                return carBooking;
-            }
-        }
-
-        return null;
+        return carBookings
+                .stream()
+                .filter(carBooking -> carBookingId.equals(carBooking.getId()))
+                .findFirst()
+                .orElse(null);
     }
 }
 

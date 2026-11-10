@@ -28,24 +28,19 @@ public class CarArrayDataAccessService implements CarDAO {
 
 
     public List<Car> selectElectricCars(){
-        List<Car> electricCars = new ArrayList<>();
-        for (Car car : cars) {
+        return cars.stream()
+                .filter(Car::isElectric)
+                .toList();
 
-            if(car.isElectric()) {
-                electricCars.add(car);
-            }
-
-        }
-        return electricCars;
     }
 
     public Car selectCarById(UUID carId){
-        for (Car car : cars) {
-            if(car.getId().equals(carId)){
-                return car;
-            }
-        }
-        return null;
+
+        return cars.stream()
+                .filter(car -> car.getId().equals(carId))
+                .findFirst()
+                .orElse(null);
+
     }
 
     public List<Car> selectAllCars(){
