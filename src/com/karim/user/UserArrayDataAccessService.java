@@ -23,7 +23,7 @@ public class UserArrayDataAccessService implements UserDAO{
 
     public User selectUserById(UUID userId){
         return users.stream()
-                .filter(car -> car.getId().equals(userId))
+                .filter(user -> user.getId().equals(userId))
                 .findFirst()
                 .orElse(null);
     }

@@ -99,12 +99,9 @@ public class CarBookingService {
     }
 
     public List<Car> getAvailableElectricCars(){
-        List<Car> allElectricCars = carService.getElectricCars();
-        List<CarBooking> carBookings = carBookingDao.selectAllCarBookings();
 
-        return allElectricCars.stream()
-                .filter(car -> carBookings.stream()
-                        .noneMatch(carBooking -> car.equals(carBooking.getCar()) && carBooking.getStatus().equals(BookingStatus.ACTIVE)))
+        return getAvailableCars().stream()
+                .filter(Car::isElectric)
                 .toList();
     }
 
