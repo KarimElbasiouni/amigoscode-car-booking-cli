@@ -3,6 +3,7 @@ package com.karim.car;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class CarArrayDataAccessService implements CarDAO {
@@ -24,22 +25,11 @@ public class CarArrayDataAccessService implements CarDAO {
 
     };
 
-
-
-
-    public List<Car> selectElectricCars(){
-        return cars.stream()
-                .filter(Car::isElectric)
-                .toList();
-
-    }
-
-    public Car selectCarById(UUID carId){
+    public Optional<Car> selectCarById(UUID carId){
 
         return cars.stream()
                 .filter(car -> car.getId().equals(carId))
-                .findFirst()
-                .orElse(null);
+                .findFirst();
 
     }
 

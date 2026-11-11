@@ -56,10 +56,9 @@ public class CarBookingService {
     }
 
     public void deleteCarBookingById(UUID carBookingId) throws RuntimeException{
-        CarBooking carBooking = carBookingDao.selectCarBookingById(carBookingId);
-        if (carBooking == null){
-            throw new IllegalArgumentException("No such car booking exists. Please enter a valid Car Booking Id");
-        }
+        CarBooking carBooking = carBookingDao.selectCarBookingById(carBookingId)
+                .orElseThrow(()-> new IllegalArgumentException("No such car booking exists. Please enter a valid Car Booking Id"));
+
         if (carBooking.getStatus().equals(BookingStatus.CANCELLED)){
             throw new RuntimeException("Booking Already Deleted: Booking was already cancelled previously");
         }
@@ -67,10 +66,7 @@ public class CarBookingService {
     }
 
     public List<CarBooking> getUserBookings(UUID userId) throws RuntimeException{
-        User user = userService.getUserById(userId);
-        if(user==null) {
-            throw new RuntimeException("User does not exist");
-        }
+        User user = userService.getUserById(userId); //Exception is thrown if Optional is empty in UserService.java
         List<CarBooking> userCarBookings = carBookingDao.selectCarBookingsByUserId(userId);
 
         if(!userCarBookings.isEmpty()){
@@ -99,7 +95,6 @@ public class CarBookingService {
     }
 
     public List<Car> getAvailableElectricCars(){
-
         return getAvailableCars().stream()
                 .filter(Car::isElectric)
                 .toList();

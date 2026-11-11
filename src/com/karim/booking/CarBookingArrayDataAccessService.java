@@ -2,6 +2,7 @@ package com.karim.booking;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class CarBookingArrayDataAccessService implements CarBookingDAO {
@@ -35,12 +36,11 @@ public class CarBookingArrayDataAccessService implements CarBookingDAO {
     }
 
     @Override
-    public CarBooking selectCarBookingById(UUID carBookingId){
+    public Optional<CarBooking> selectCarBookingById(UUID carBookingId){
         return carBookings
                 .stream()
                 .filter(carBooking -> carBookingId.equals(carBooking.getId()))
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 }
 

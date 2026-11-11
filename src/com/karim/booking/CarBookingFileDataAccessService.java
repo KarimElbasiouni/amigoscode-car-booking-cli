@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class CarBookingFileDataAccessService implements CarBookingDAO {
@@ -84,7 +85,6 @@ public class CarBookingFileDataAccessService implements CarBookingDAO {
             try (ObjectInputStream input = new ObjectInputStream(
                     new FileInputStream(bookingsFile)))
             {
-
                 while (true) {
                     CarBooking currentBooking = (CarBooking) input.readObject();
                     if (currentBooking.equals(carBooking)) {
@@ -98,7 +98,6 @@ public class CarBookingFileDataAccessService implements CarBookingDAO {
         }  catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-
 
         try {
             Files.copy(Path.of(tempWritingFile.getPath()), Path.of(bookingsFile.getPath()), StandardCopyOption.REPLACE_EXISTING);
@@ -115,7 +114,6 @@ public class CarBookingFileDataAccessService implements CarBookingDAO {
                 ObjectInputStream input = new ObjectInputStream(
                         new FileInputStream(bookingsFile))
         ){
-
             for (int i = 0; i < numOfBookings; i++) {
                 CarBooking currentBooking = (CarBooking) input.readObject();
                 allCarBookings.add(currentBooking);
@@ -138,7 +136,6 @@ public class CarBookingFileDataAccessService implements CarBookingDAO {
                 ObjectInputStream input = new ObjectInputStream(
                         new FileInputStream(bookingsFile))
         ){
-
             while(true) {
                 CarBooking currentBooking = (CarBooking) input.readObject();
                 if(userId.equals(currentBooking.getUser().getId())){
@@ -156,21 +153,20 @@ public class CarBookingFileDataAccessService implements CarBookingDAO {
 
 
     @Override
-    public CarBooking selectCarBookingById(UUID carBookingId) {
+    public Optional<CarBooking> selectCarBookingById(UUID carBookingId) {
         try (
                 ObjectInputStream input = new ObjectInputStream(
                         new FileInputStream(bookingsFile)))
         {
-
             while(true) {
                 CarBooking currentBooking = (CarBooking) input.readObject();
                 if(carBookingId.equals(currentBooking.getId())){
-                    return currentBooking;
+                    return Optional.of(currentBooking);
                 }
             }
 
         } catch (EOFException e) {
-            return null;
+            return Optional.empty();
 
         }catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
