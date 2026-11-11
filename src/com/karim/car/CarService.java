@@ -11,24 +11,11 @@ public class CarService {
     }
 
     public Car getCarById(UUID id) throws RuntimeException{
-        Car car = carDao.selectCarById(id);
-        if(car==null){
-            throw new RuntimeException("Car does not exist");
-
-        }
-        return car;
-    }
-
-    public List<Car> getElectricCars() throws RuntimeException{
-        List<Car> electricCars = carDao.selectElectricCars();
-        if (!electricCars.isEmpty()){
-            return electricCars;
-        }
-        throw new RuntimeException("No electric cars in database");
+        return carDao.selectCarById(id)
+                .orElseThrow(()-> new RuntimeException("Car does not exist"));
     }
 
     public List<Car> getAllCars(){
-        // no checks since there is No CRUD functionality for Cars
         return carDao.selectAllCars();
     }
 

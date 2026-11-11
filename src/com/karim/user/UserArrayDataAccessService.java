@@ -2,6 +2,7 @@ package com.karim.user;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class UserArrayDataAccessService implements UserDAO{
@@ -21,12 +22,9 @@ public class UserArrayDataAccessService implements UserDAO{
         return new ArrayList<>(users);
     }
 
-    public User selectUserById(UUID userId){
-        for (User user : users) {
-            if(user.getId().equals(userId)){
-                return user;
-            }
-        }
-        return null;
+    public Optional<User> selectUserById(UUID userId){
+        return users.stream()
+                .filter(user -> user.getId().equals(userId))
+                .findFirst();
     }
 }

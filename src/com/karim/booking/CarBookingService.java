@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -57,10 +56,9 @@ public class CarBookingService {
     }
 
     public void deleteCarBookingById(UUID carBookingId) throws RuntimeException{
-        CarBooking carBooking = carBookingDao.selectCarBookingById(carBookingId);
-        if (carBooking == null){
-            throw new IllegalArgumentException("No such car booking exists. Please enter a valid Car Booking Id");
-        }
+        CarBooking carBooking = carBookingDao.selectCarBookingById(carBookingId)
+                .orElseThrow(()-> new IllegalArgumentException("No such car booking exists. Please enter a valid Car Booking Id"));
+
         if (carBooking.getStatus().equals(BookingStatus.CANCELLED)){
             throw new RuntimeException("Booking Already Deleted: Booking was already cancelled previously");
         }
@@ -68,10 +66,7 @@ public class CarBookingService {
     }
 
     public List<CarBooking> getUserBookings(UUID userId) throws RuntimeException{
-        User user = userService.getUserById(userId);
-        if(user==null) {
-            throw new RuntimeException("User does not exist");
-        }
+        User user = userService.getUserById(userId); //Exception is thrown if Optional is empty in UserService.java
         List<CarBooking> userCarBookings = carBookingDao.selectCarBookingsByUserId(userId);
 
         if(!userCarBookings.isEmpty()){
@@ -93,38 +88,16 @@ public class CarBookingService {
         List<Car> allCars = carService.getAllCars();
         List<CarBooking> carBookings = carBookingDao.selectAllCarBookings();
 
-        List<Car> availableCars = new ArrayList<>();
-
-        outerLoop:
-        for (Car car : allCars) {
-            for (CarBooking carBooking : carBookings) {
-                if(car.equals(carBooking.getCar())
-                        && carBooking.getStatus().equals(BookingStatus.ACTIVE)) {
-                    continue outerLoop;
-                }
-            }
-            availableCars.add(car);
-        }
-        return availableCars;
+        return allCars.stream()
+                .filter(car -> carBookings.stream()
+                        .noneMatch(carBooking -> (car.equals(carBooking.getCar()) && carBooking.getStatus().equals(BookingStatus.ACTIVE))))
+                .toList();
     }
 
     public List<Car> getAvailableElectricCars(){
-        List<Car> allElectricCars = carService.getElectricCars();
-        List<CarBooking> carBookings = carBookingDao.selectAllCarBookings();
-
-        List<Car> availableElectricCars = new ArrayList<>();
-
-        outerLoop:
-        for (Car car : allElectricCars) {
-            for (CarBooking carBooking : carBookings) {
-                if(car.equals(carBooking.getCar())
-                        && carBooking.getStatus().equals(BookingStatus.ACTIVE)) {
-                    continue outerLoop;
-                }
-            }
-            availableElectricCars.add(car);
-        }
-        return availableElectricCars;
+        return getAvailableCars().stream()
+                .filter(Car::isElectric)
+                .toList();
     }
 
     private void validateDates(LocalDate startDate, LocalDate endDate) throws IllegalArgumentException{
@@ -139,17 +112,14 @@ public class CarBookingService {
     }
 
     private void checkCarAvailability(List<CarBooking> carBookings, UUID carId) throws RuntimeException {
-
-        for (CarBooking booking : carBookings) {
-            if(booking == null){
-                continue;
-            }
-            if (booking.getCar().getId().equals(carId) &&
-                    booking.getStatus().equals(BookingStatus.ACTIVE)) {
-                throw new RuntimeException("Car is not available");
-            }
+        if(carBookings
+                .stream()
+                .anyMatch(booking -> booking.getCar().getId().equals(carId)
+                        && booking.getStatus().equals(BookingStatus.ACTIVE)
+                ))
+        {
+            throw new RuntimeException("Car is not available");
         }
-
     }
 
 }
