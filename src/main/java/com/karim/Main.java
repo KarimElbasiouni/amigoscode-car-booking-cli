@@ -9,6 +9,7 @@ import com.karim.car.CarDAO;
 import com.karim.car.CarService;
 import com.karim.user.UserArrayDataAccessService;
 import com.karim.user.UserDAO;
+import com.karim.user.UserFakerDataAccessService;
 import com.karim.user.UserService;
 
 import java.time.LocalDate;
@@ -19,7 +20,7 @@ import java.util.UUID;
 public class Main {
 
 
-    private final static UserDAO userDao = new UserArrayDataAccessService();
+    private final static UserDAO userDao = new UserFakerDataAccessService();
     private final static CarDAO carDao = new CarArrayDataAccessService();
     private final static CarBookingDAO carBookingDao = new CarBookingArrayDataAccessService();
 
